@@ -1,0 +1,89 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  zookeeper-2:
+    image: wurstmeister/zookeeper
+    hostname: zookeeper-2
+    container_name: zookeeper-2
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 32181:2181
+
+  kafka-1:
+    image: wurstmeister/kafka
+    hostname: kafka-1
+    container_name: kafka-1
+    depends_on:
+      - zookeeper
+      - zookeeper-2
+    ports:
+      - 19092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka-1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper-2:2181
+      KAFKA_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://localhost:19092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+
+  kafka-2:
+    image: wurstmeister/kafka
+    container_name: kafka-2
+    depends_on:
+      - zookeeper
+      - zookeeper-2
+      - kafka-1
+    ports:
+      - 29092:9092
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ADVERTISED_HOST_NAME: kafka-2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper-2:2181
+      KAFKA_LISTENERS: INTERNAL://kafka-2:9092,EXTERNAL://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:9092,EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+
+  kafka-3:
+    image: wurstmeister/kafka
+    container_name: kafka-3
+    depends_on:
+      - zookeeper
+      - zookeeper-2
+      - kafka-2
+    ports:
+      - 39092:9092
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ADVERTISED_HOST_NAME: kafka-3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper-2:2181
+      KAFKA_LISTENERS: INTERNAL://kafka-3:9092,EXTERNAL://localhost:39092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:9092,EXTERNAL://localhost:39092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_CREATE_TOPICS: "cricket:3:3,football:3:3"
+      # Creating cricket, football topics here. Dynamically Advertise and create rest in code/demo
+
+
+networks:
+  default:
+    external: true
+    name: phase3_network

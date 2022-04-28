@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Input</title>
+    <style type="text/css">
+.boxed {
+  border: 3px solid green ;width:70%;height:275px;overflow:auto;position:relative;top: -300px;left: 400px;background-color: orange
+}
+.boxed1 {
+  border: 3px solid blue ;width:24%;height:200px;overflow:auto;position:relative;top: -700px;left: 0px;
+}
+.boxed2 {
+    padding: 10px; border: 2px solid red;top: 100px;left: 0px;color:blue
+}
+label {
+    color:yellow;
+    font-size: 18px;
+}
+
+input[type=checkbox]:hover {
+    box-shadow:0px 0px 10px #1300ff;
+}
+    
+        
+        
+</style>
+    
+<style>
+body {
+  background-image: url('https://inteng-storage.s3.amazonaws.com/img/iea/rV6ndqlOXq/sizes/social-media_md.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  background-size: 100% 100%;
+}
+</style>
+    
+</head>
+
+<body>
+
+<form method="POST">
+    
+    
+    <p style="font-size: 30px;color: red"><strong>Topics to Subscribe</strong></p>
+    {% for element in notifications%}
+        <input style="font-size: 200px;" type="checkbox" name={{element}}><label for="checkbox">{{element}} &nbsp; &nbsp; 
+        <select style="font-size: 30px; width:100px" name=Social{{element}} id=Social{{element}}>
+        <option value="Twitter">Twitter</option>
+        <option value="Reddit">Reddit</option>
+        <option value="Both">Both</option>
+        </select><br><br>
+    {% endfor %}
+
+    <p> <input type="submit"> </p>
+    
+    
+    
+    <p style="font-size: 30px;color: red"><strong>Topics to Un-Subscribe</strong></p>
+    {% for element in unsubscribe%}
+        <input style="font-size: 200px;" type="checkbox" name={{element}}><label for="checkbox">{{element}}<br>
+    {% endfor %}
+
+
+    <p> <input type="submit"> </p>
+    
+</form>
+
+{% for element in list_to_send.keys()%}
+
+    <div class="boxed">
+    <p style="left:400px;position:relative;color:blue"><strong>Topic: {{element}} (Most Recent Data)</strong></p>
+    {% for elem in list_to_send[element]%}
+        <p class="boxed2">{{elem}}</p>
+    {% endfor %}
+    </div> <br>
+    
+{% endfor %}
+
+
+
+<!--<script>
+function timedRefresh(timeoutPeriod) {
+	setTimeout("location.reload(true);",timeoutPeriod);
+}
+
+window.onload = timedRefresh(15000);
+</script>-->
+</body>
+</html>

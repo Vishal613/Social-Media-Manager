@@ -1,0 +1,85 @@
+version: '3'
+services:
+
+  subscriber-1:
+    image: subscriber
+    container_name: subscriber-1
+    ports:
+      - '8901:8991'
+
+  subscriber-2:
+    image: subscriber
+    container_name: subscriber-2
+    ports:
+      - '8902:8991'
+    depends_on:
+      - subscriber-1
+
+  subscriber-3:
+    image: subscriber
+    container_name: subscriber-3
+    ports:
+      - '8903:8991'
+    depends_on:
+      - subscriber-2
+
+  subscriber-4:
+    image: subscriber
+    container_name: subscriber-4
+    ports:
+      - '8904:8991'
+    depends_on:
+      - subscriber-3
+
+  subscriber-5:
+    image: subscriber
+    container_name: subscriber-5
+    ports:
+      - '8905:8991'
+    depends_on:
+      - subscriber-4
+
+  subscriber-6:
+    image: subscriber
+    container_name: subscriber-6
+    ports:
+      - '8906:8991'
+    depends_on:
+      - subscriber-5
+
+  subscriber-7:
+    image: subscriber
+    container_name: subscriber-7
+    ports:
+      - '8907:8991'
+    depends_on:
+      - subscriber-6
+
+  subscriber-8:
+    image: subscriber
+    container_name: subscriber-8
+    ports:
+      - '8908:8991'
+    depends_on:
+      - subscriber-7
+
+  subscriber-9:
+    image: subscriber
+    container_name: subscriber-9
+    ports:
+      - '8909:8991'
+    depends_on:
+      - subscriber-8
+
+  subscriber-10:
+    image: subscriber
+    container_name: subscriber-10
+    ports:
+      - '8910:8991'
+    depends_on:
+      - subscriber-9
+
+networks:
+  default:
+    external: true
+    name: phase3_network
